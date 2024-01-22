@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { da } from 'date-fns/locale';
 
 export const api = createApi({
   reducerPath: 'api',
@@ -8,9 +9,21 @@ export const api = createApi({
       query: () => '/products',
     }),
     singleProduct: builder.query({
+      // query: (id) => ({ url: `/product/${id}` }),
       query: (id) => `/product/${id}`,
+    }),
+    postComment: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/comment/${id}`,
+        method: 'POST',
+        body: data,
+      }),
     }),
   }),
 });
 
-export const { useGetProductsQuery, useSingleProductQuery } = api;
+export const {
+  useGetProductsQuery,
+  useSingleProductQuery,
+  usePostCommentMutation,
+} = api;
