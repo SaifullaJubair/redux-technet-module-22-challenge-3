@@ -1,5 +1,4 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { da } from 'date-fns/locale';
 
 export const api = createApi({
   reducerPath: 'api',
