@@ -12,22 +12,32 @@ import {
 import { HiOutlineSearch } from 'react-icons/hi';
 import Cart from '../components/Cart';
 import logo from '../assets/images/technet-logo.png';
-import { useAppSelector } from '@/redux/hook';
+import { useAppDispatch, useAppSelector } from '@/redux/hook';
 import { LogOut } from 'lucide-react';
+import { signOut } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
+import { setUser } from '@/redux/features/user/userSlice';
 
 export default function Navbar() {
   const { user } = useAppSelector((state) => state.user);
 
-  const handleLogut = () => {
+  const dispatch = useAppDispatch();
+  const handleLogOut = () => {
     console.log(LogOut);
+    signOut(auth).then(() => {
+      // Sign-out successful.
+      dispatch(setUser(null));
+    });
   };
   return (
     <nav className="w-full h-16 fixed top backdrop-blur-lg z-10">
       <div className="h-full w-full bg-white/60">
         <div className="flex items-center justify-between w-full md:max-w-7xl h-full mx-auto ">
-          <div>
-            <img className="h-8" src={logo} alt="log" />
-          </div>
+          <Link to="/">
+            <div>
+              <img className="h-8" src={logo} alt="log" />
+            </div>
+          </Link>
           <div>
             <ul className="flex items-center">
               <li>
@@ -69,18 +79,22 @@ export default function Navbar() {
                     </DropdownMenuItem>
                     {!user.email && (
                       <>
-                        <DropdownMenuItem className="cursor-pointer">
-                          <Link to="/login">Login</Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="cursor-pointer">
-                          <Link to="/signup">SignUp</Link>
-                        </DropdownMenuItem>
+                        <Link to="/login">
+                          <DropdownMenuItem className="cursor-pointer">
+                            Login
+                          </DropdownMenuItem>
+                        </Link>
+                        <Link to="/signup">
+                          <DropdownMenuItem className="cursor-pointer">
+                            SignUp
+                          </DropdownMenuItem>
+                        </Link>
                       </>
                     )}
                     {user.email && (
                       <DropdownMenuItem
                         className="cursor-pointer"
-                        onClick={handleLogut}
+                        onClick={handleLogOut}
                       >
                         Logout
                       </DropdownMenuItem>
